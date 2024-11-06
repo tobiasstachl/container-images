@@ -36,6 +36,7 @@ RUN pip install --no-cache-dir --upgrade \
   jupyterlab-s3-browser \
   nbgitpuller \
   psycopg2-binary \
+  jupyter-dash \
   eodc
 
 USER ${NB_UID}
