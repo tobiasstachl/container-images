@@ -2,7 +2,8 @@
 # Distributed under the terms of the Modified BSD License.
 ARG REGISTRY=quay.io
 ARG OWNER=jupyter
-ARG BASE_IMAGE=$REGISTRY/$OWNER/minimal-notebook
+ARG TAG=python-3.11.10
+ARG BASE_IMAGE=$REGISTRY/$OWNER/minimal-notebook:$TAG
 FROM $BASE_IMAGE
 
 LABEL maintainer="EODC Gmbh <support@eodc.eu>"
@@ -35,7 +36,6 @@ RUN pip install --no-cache-dir --upgrade \
   jupyterlab-s3-browser \
   nbgitpuller \
   psycopg2-binary \
-  eodc && \
-  pip cache purge
+  eodc
 
 USER ${NB_UID}
