@@ -35,7 +35,7 @@ RUN pip install --no-cache-dir --upgrade \
   jupyterlab-s3-browser \
   nbgitpuller \
   psycopg2-binary \
-  eodc &&\
-  pip cache pruge
+  eodc && \
+  pip cache purge
 
 USER ${NB_UID}
