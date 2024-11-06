@@ -1,0 +1,33 @@
+name: Build and Push Docker Image to GHCR
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - jupyterlab/eodc-minimal-notebook.dockerfile  # Trigger on pushes to the 'main' branch
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Check out the code from the repository
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Log in to GitHub Container Registry
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # Build the Docker image
+      - name: Build Docker image
+        run: docker build -t ghcr.io/${{ github.repository }}/eodc-minimal-notebook:latest -f jupyterlab/eodc-minimal-notebook.dockerfile .
+
+      # Push the Docker image to GitHub Container Registry
+      - name: Push Docker image
+        run: docker push ghcr.io/${{ github.repository }}/eodc-minimal-notebook:latest
