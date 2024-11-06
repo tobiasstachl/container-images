@@ -21,9 +21,9 @@ RUN apt-get update --yes && \
   cm-super \
   dvipng \
   # for matplotlib anim
-  ffmpeg && \
+  ffmpeg \
   # s3 support
-  s3fs && \
+  s3fs \
   s3cmd && \
   apt-get clean && rm -rf /var/lib/apt/lists/*
 
