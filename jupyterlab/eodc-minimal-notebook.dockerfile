@@ -33,11 +33,13 @@ RUN pip install --no-cache-dir --upgrade \
   pexpect==4.9.0 \
   jupyterlab_widgets \
   dask-labextension \
-  jupyterlab-s3-browser \
+  #jupyterlab-s3-browser \
   nbgitpuller \
   psycopg2-binary \
+  odc-stac==0.3.9 \
+  zarr \
   eodc
 
-RUN jupyter lab build --minimize=False
+RUN jupyter lab build --minimize=False -y
 
 USER ${NB_UID}
