@@ -42,4 +42,16 @@ RUN pip install --no-cache-dir --upgrade \
 
 RUN jupyter lab build --minimize=False -y
 
+RUN pip install --no-cache-dir --upgrade jupyter-fs \
+  cat << 'EOF' > /etc/jupyter/jupyter_server_config.json
+  {
+    "ServerApp": {
+      "contents_manager_class": "jupyterfs.metamanager.MetaManager",
+      "jpserver_extensions": {
+        "jupyterfs.extension": true
+      }
+    }
+  }
+  EOF
+
 USER ${NB_UID}
