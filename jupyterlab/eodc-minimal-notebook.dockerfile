@@ -50,6 +50,15 @@ RUN pip install --no-cache-dir --upgrade jupyter-fs \
       "jpserver_extensions": {
         "jupyterfs.extension": true
       }
+    },
+    "JupyterFs": {
+      "resources": [
+        {
+          "name": "EODC S3",
+          "url": "s3:///{{key}}:{{secret}}@{{bucket}}",
+          "endpoint": "objectstore.eodc.eu:2222"
+        }
+      ]
     }
   }
   EOF
