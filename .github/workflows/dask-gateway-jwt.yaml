@@ -1,16 +1,15 @@
 name: Build and Push Dask Gateway Server
 
 on:
-  pull_request_target:
-    types:
-      - closed
+  push:
+    branches:
+      - main
     paths:
-      - dask_gateway/**  # Trigger on pushes to the 'main' branch
+      - dask_gateway/**
 
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
-
     steps:
       # Check out the code from the repository
       - name: Checkout code
