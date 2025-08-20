@@ -32,7 +32,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
-          context: .
+          context: ./dask_gateway
           push: true
           tags: ghcr.io/${{ github.repository }}/dask-gateway-server-jwt:latest
           file: dask_gateway/dask-gateway-jwt.dockerfile
