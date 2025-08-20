@@ -1,11 +1,11 @@
-name: Build and Push Docker Image to GHCR
+name: Build and Push Dask Gateway Server
 
 on:
-  push:
-    branches:
-      - main
+  pull_request_target:
+    types:
+      - closed
     paths:
-      - dask_gateway/dask-gateway-jwt.dockerfile  # Trigger on pushes to the 'main' branch
+      - dask_gateway/**  # Trigger on pushes to the 'main' branch
 
 jobs:
   build-and-push:
