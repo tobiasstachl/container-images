@@ -37,10 +37,7 @@ class JwtAuthenticator(Authenticator):
     #jwks_url = "https://identity.data.destination-earth.eu/auth/realms/dedl/protocol/openid-connect/certs"  # json
 
     # Known Dask roles, order is important, from high to low
-    profiles = Dict(
-        key_trait=Unicode(),
-        value_trait=Instance(ProfileConfig)
-    )
+    profiles = Dict()
     @default("profiles")
     def _default_profiles(self):
         return {
