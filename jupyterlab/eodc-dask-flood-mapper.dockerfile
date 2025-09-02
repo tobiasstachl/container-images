@@ -42,6 +42,7 @@ RUN pip install --no-cache-dir --upgrade \
   hvplot \
   xarray \
   numpy \
+  zarr \
   eodc-connect
 
 RUN jupyter lab build --minimize=False -y
