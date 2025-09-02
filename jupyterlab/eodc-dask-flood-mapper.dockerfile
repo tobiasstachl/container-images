@@ -37,6 +37,9 @@ RUN pip install --no-cache-dir --upgrade \
   rich \
   pystac-client \
   dask-flood-mapper \
+  hvplot \
+  xarray \
+  numpy \
   eodc-connect
 
 RUN jupyter lab build --minimize=False -y
