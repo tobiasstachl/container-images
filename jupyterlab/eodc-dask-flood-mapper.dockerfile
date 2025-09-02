@@ -1,29 +1,44 @@
-FROM continuumio/miniconda3:25.3.1-1
+# Copyright (c) Jupyter Development Team.
+# Distributed under the terms of the Modified BSD License.
+ARG REGISTRY=quay.io
+ARG OWNER=jupyter
+ARG TAG=python-3.11.10
+ARG BASE_IMAGE=$REGISTRY/$OWNER/minimal-notebook:$TAG
+FROM $BASE_IMAGE
 
-ENV HOME=/home/jovyan \
-    PATH=/opt/conda/bin:$PATH
+LABEL maintainer="EODC Gmbh <support@eodc.eu>"
+
+# Fix: https://github.com/hadolint/hadolint/wiki/DL4006
+# Fix: https://github.com/koalaman/shellcheck/wiki/SC3014
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 USER root
 
 RUN apt-get update --yes && \
-    apt-get install --yes --no-install-recommends \
-    curl git less vim-tiny nano-tiny && \
-    apt-get clean && rm -rf /var/lib/apt/lists/*
+  apt-get install --yes --no-install-recommends \
+  # for cython: https://cython.readthedocs.io/en/latest/src/quickstart/install.html
+  build-essential \
+  # for latex labels
+  cm-super \
+  dvipng \
+  # for matplotlib anim
+  ffmpeg \
+  # s3 support
+  s3fs \
+  s3cmd && \
+  apt-get clean && rm -rf /var/lib/apt/lists/*
 
-WORKDIR $HOME
+RUN pip install --no-cache-dir --upgrade \
+  # fix to make git labextension working for authentication
+  pexpect==4.9.0 \
+  jupyterlab_widgets \
+  dask-labextension \
+  odc-stac \
+  rich \
+  pystac-client \
+  dask-flood-mapper \
+  eodc-connect
 
-COPY eodc-dask-flood-mapper-environment.yml /environment.yml
+RUN jupyter lab build --minimize=False -y
 
-RUN conda install mamba -n base -c conda-forge && \
-    mamba env update -n base -f /environment.yml && \
-    mamba clean --all -f -y && \
-    rm -rf /environment.yml
-
-USER root
-
-EXPOSE 8888
-CMD ["jupyter", "lab", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root"]
-
-
-#RUN curl -L https://raw.githubusercontent.com/interTwin-eu/dask-flood-mapper/refs/heads/workshop-f/notebooks/workshop.ipynb \
-#    -o /home/jovyan/workshop.ipynb
+USER ${NB_UID}
