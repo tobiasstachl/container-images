@@ -33,6 +33,8 @@ RUN pip install --no-cache-dir --upgrade \
   pexpect==4.9.0 \
   jupyterlab_widgets \
   dask-labextension \
+  nbgitpuller \
+  psycopg2-binary \
   odc-stac \
   rich \
   pystac-client \
