@@ -41,4 +41,7 @@ RUN pip install --no-cache-dir --upgrade \
 
 RUN jupyter lab build --minimize=False -y
 
+RUN pip install --no-cache-dir --upgrade jupyter-fs
+COPY ./jupyter_server_config.json /etc/jupyter/jupyter_server_config.json
+
 USER ${NB_UID}
