@@ -45,6 +45,5 @@ jobs:
           context: .
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
-          tags: ghcr.io/${{ github.repository }}/eodc-minimal-notebook:latest
           labels: ${{ steps.meta.outputs.labels }}
           file: jupyterlab/eodc-dask-flood-mapper.dockerfile
