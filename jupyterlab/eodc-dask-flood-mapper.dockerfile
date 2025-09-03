@@ -28,8 +28,11 @@ RUN pip install --no-cache-dir --upgrade \
   jupyterlab_widgets \
   dask-labextension \
   rich \
-  dask-flood-mapper \
-  eodc-connect
+  hvplot \
+  bokeh \
+  numba \
+  scipy \
+  eodc-connect \
 
 RUN jupyter lab build --minimize=False -y
 
