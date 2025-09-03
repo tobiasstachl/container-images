@@ -24,6 +24,11 @@ RUN apt-get update --yes && \
   apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN pip install --no-cache-dir --upgrade \
+  pexpect==4.9.0 \
+  jupyterlab_widgets \
+  dask-labextension \
+  rich \
+  dask-flood-mapper \
   eodc-connect
 
 RUN jupyter lab build --minimize=False -y
