@@ -32,7 +32,7 @@ RUN pip install --no-cache-dir --upgrade \
   bokeh \
   numba \
   scipy \
-  eodc-connect \
+  eodc-connect
 
 RUN jupyter lab build --minimize=False -y
 
