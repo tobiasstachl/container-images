@@ -32,6 +32,9 @@ RUN pip install --no-cache-dir --upgrade \
   bokeh \
   numba \
   scipy \
+  pystac_client \
+  odc-stac \
+  rioxarray \
   eodc-connect
 
 RUN jupyter lab build --minimize=False -y
