@@ -35,6 +35,8 @@ RUN pip install --no-cache-dir --upgrade \
   pystac_client \
   odc-stac \
   rioxarray \
+  geoviews \
+  datashader \
   eodc-connect
 
 RUN jupyter lab build --minimize=False -y
