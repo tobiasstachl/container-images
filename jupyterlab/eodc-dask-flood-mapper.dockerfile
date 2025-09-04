@@ -37,14 +37,16 @@ RUN pip install --no-cache-dir --upgrade \
   # datashader \
   eodc-connect
 
-# Clean JupyterLab build cache and build (if needed)
-RUN jupyter lab clean --all
-
 # Install additional extensions
 RUN pip install --no-cache-dir --upgrade jupyter-fs
 
 # Copy server config
 COPY jupyterlab/jupyter_server_config.json /etc/jupyter/jupyter_server_config.json
+
+RUN jlpm install && \
+    jlpm run build:core && \
+    jupyter lab build && \
+    jupyter lab clean --all
 
 # Switch back to notebook user
 USER $NB_UID
