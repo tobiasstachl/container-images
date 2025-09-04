@@ -35,14 +35,11 @@ RUN pip install --no-cache-dir --upgrade \
   pystac_client \
   odc-stac \
   rioxarray \
-  geoviews \
-  datashader
+  eodc-connect
 
 RUN jupyter lab build --minimize=False -y
 
 RUN pip install --no-cache-dir --upgrade jupyter-fs
 COPY jupyterlab/jupyter_server_config.json /etc/jupyter/jupyter_server_config.json
-
-RUN pip install --no-cache-dir eodc-connect
 
 USER ${NB_UID}
