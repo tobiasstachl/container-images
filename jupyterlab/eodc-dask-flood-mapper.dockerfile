@@ -16,8 +16,6 @@ USER root
 
 RUN apt-get update --yes && \
   apt-get install --yes --no-install-recommends \
-  # for cython: https://cython.readthedocs.io/en/latest/src/quickstart/install.html
-  build-essential \
   # s3 support
   s3fs \
   s3cmd && \
