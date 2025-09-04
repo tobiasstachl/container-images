@@ -2,7 +2,7 @@
 # Distributed under the terms of the Modified BSD License.
 ARG REGISTRY=quay.io
 ARG OWNER=jupyter
-ARG TAG=python-3.11.13
+ARG TAG=python-3.12.10
 ARG BASE_IMAGE=$REGISTRY/$OWNER/minimal-notebook:$TAG
 FROM $BASE_IMAGE
 
@@ -34,6 +34,7 @@ RUN pip install --no-cache-dir --upgrade \
   odc-stac \
   rioxarray \
   geoviews \
+  datashader \
   eodc-connect
 
 RUN jupyter lab build --minimize=False -y
