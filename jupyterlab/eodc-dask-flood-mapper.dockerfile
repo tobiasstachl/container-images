@@ -33,8 +33,8 @@ RUN pip install --no-cache-dir --upgrade \
   pystac_client \
   odc-stac \
   rioxarray \
-  geoviews \
-  datashader \
+  # geoviews \
+  # datashader \
   eodc-connect
 
 # Clean JupyterLab build cache and build (if needed)
