@@ -4,6 +4,11 @@ ARG TAG=python-3.12.10
 ARG BASE_IMAGE=$REGISTRY/$OWNER/minimal-notebook:$TAG
 FROM $BASE_IMAGE
 
+ARG GIT_REPO="https://github.com/interTwin-eu/dask-flood-mapper.git"
+ARG GIT_REF="workshop-modified"
+ARG TARGET_SUBDIR="workshop"        
+ARG TARGET_NAME="dask-flood-mapper"
+
 LABEL maintainer="EODC GmbH <support@eodc.eu>"
 
 # Safer shell
@@ -15,6 +20,8 @@ RUN apt-get update --yes \
  && apt-get install --yes --no-install-recommends \
       s3fs \
       s3cmd \
+      git \
+      ca-certificates \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
 
@@ -27,6 +34,8 @@ RUN mamba install -y -n base -c conda-forge \
       panel=1.4.* \
       holoviews=1.21.* \
       hvplot=0.12.* \
+      geoviews=1.12.* \
+      cartopy \
       xarray>=2024.1 \
       rioxarray \
       numba \
@@ -48,11 +57,20 @@ RUN pip install --no-cache-dir --no-compile \
       rich \
       eodc-connect
 
+RUN set -eux; \
+    REPO_DIR="/home/${NB_USER}/${TARGET_SUBDIR}/${TARGET_NAME}"; \
+    mkdir -p "$(dirname '$REPO_DIR')"; \
+    git clone --branch "$GIT_REF" "$GIT_REPO" "$REPO_DIR"; \
+    true
+
 # Server config and permissions
 USER root
 COPY jupyterlab/jupyter_server_config.json /etc/jupyter/jupyter_server_config.json
 RUN fix-permissions "${CONDA_DIR}" \
  && fix-permissions "/home/${NB_USER}"
 
-# Back to the notebook user
+# Replace or insert root_dir using sed
+RUN sed -i 's#"root_dir": *"[^"]*"#"root_dir": "/home/'"$NB_USER"'/'"$TARGET_SUBDIR"'/'"$TARGET_NAME"'"#' /etc/jupyter/jupyter_server_config.json || \
+    sed -i '/"ServerApp": {/a \    "root_dir": "/home/'"$NB_USER"'/'"$TARGET_SUBDIR"'/'"$TARGET_NAME"'",' /etc/jupyter/jupyter_server_config.json
+
 USER $NB_UID
