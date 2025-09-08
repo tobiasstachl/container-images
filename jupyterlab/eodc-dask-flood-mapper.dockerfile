@@ -18,8 +18,6 @@ USER root
 
 RUN apt-get update --yes \
  && apt-get install --yes --no-install-recommends \
-      s3fs \
-      s3cmd \
       git \
       ca-certificates \
  && apt-get clean \
@@ -36,7 +34,7 @@ RUN mamba install -y -n base -c conda-forge \
       hvplot=0.12.* \
       geoviews=1.12.* \
       cartopy \
-      xarray>=2024.1 \
+      xarray \
       rioxarray \
       numba \
       scipy \
@@ -57,12 +55,6 @@ RUN pip install --no-cache-dir --no-compile \
       rich \
       eodc-connect
 
-RUN set -eux; \
-    REPO_DIR="/home/${NB_USER}/${TARGET_SUBDIR}/${TARGET_NAME}"; \
-    mkdir -p "$(dirname '$REPO_DIR')"; \
-    git clone --branch "$GIT_REF" "$GIT_REPO" "$REPO_DIR"; \
-    true
-
 # Server config and permissions
 USER root
 COPY jupyterlab/jupyter_server_config.json /etc/jupyter/jupyter_server_config.json
@@ -70,7 +62,12 @@ RUN fix-permissions "${CONDA_DIR}" \
  && fix-permissions "/home/${NB_USER}"
 
 # Replace or insert root_dir using sed
-RUN sed -i 's#"root_dir": *"[^"]*"#"root_dir": "/home/'"$NB_USER"'/'"$TARGET_SUBDIR"'/'"$TARGET_NAME"'"#' /etc/jupyter/jupyter_server_config.json || \
-    sed -i '/"ServerApp": {/a \    "root_dir": "/home/'"$NB_USER"'/'"$TARGET_SUBDIR"'/'"$TARGET_NAME"'",' /etc/jupyter/jupyter_server_config.json
+RUN sed -i '/"ServerApp": {/a \    "root_dir": "/home/'"$NB_USER"'/'"$TARGET_SUBDIR"'/'"$TARGET_NAME"'",' /etc/jupyter/jupyter_server_config.json
 
 USER $NB_UID
+
+RUN set -eux; \
+    REPO_DIR="/home/${NB_USER}/${TARGET_SUBDIR}/${TARGET_NAME}"; \
+    mkdir -p "$(dirname '$REPO_DIR')"; \
+    git clone --branch "$GIT_REF" "$GIT_REPO" "$REPO_DIR"; \
+    true
