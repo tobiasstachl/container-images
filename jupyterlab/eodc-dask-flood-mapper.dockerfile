@@ -43,6 +43,7 @@ RUN mamba install -y -n base -c conda-forge \
       odc-stac \
       jupyter-fs \
       tornado=6.5.2 \
+      nbgitpuller \
   && mamba clean -afy
 
 # Environment knobs to keep pip from leaving caches/pyc
