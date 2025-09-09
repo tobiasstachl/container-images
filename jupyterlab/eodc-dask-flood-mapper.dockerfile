@@ -50,26 +50,13 @@ RUN mamba install -y -n base -c conda-forge \
 ENV PIP_NO_CACHE_DIR=1
 ENV PYTHONDONTWRITEBYTECODE=1
 
-# Switch to notebook user for pip-only packages
-# USER $NB_UID
-
 RUN pip install --no-cache-dir --no-compile \
       rich \
       eodc-connect
 
 # Server config and permissions
-# USER root
 COPY jupyterlab/jupyter_server_config.json /etc/jupyter/jupyter_server_config.json
 RUN fix-permissions "${CONDA_DIR}" \
  && fix-permissions "/home/${NB_USER}"
 
-# Replace or insert root_dir using sed
-RUN sed -i '/"ServerApp": {/a \    "root_dir": "/home/'"$NB_USER"'/'"$TARGET_SUBDIR"'/'"$TARGET_NAME"'",' /etc/jupyter/jupyter_server_config.json
-
 USER $NB_UID
-
-RUN set -eux; \
-    REPO_DIR="/home/${NB_USER}/${TARGET_SUBDIR}/${TARGET_NAME}"; \
-    mkdir -p "$(dirname '$REPO_DIR')"; \
-    git clone --branch "$GIT_REF" "$GIT_REPO" "$REPO_DIR"; \
-    true
