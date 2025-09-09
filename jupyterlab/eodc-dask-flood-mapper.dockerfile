@@ -25,7 +25,7 @@ RUN apt-get update --yes \
 
 # Conda/ Mamba install: pin a compact, compatible HoloViz stack for Py 3.12 + Bokeh 3.4
 RUN mamba install -y -n base -c conda-forge \
-      python=3.12 \
+      python=3.12.11 \
       jupyterlab \
       ipywidgets \
       bokeh=3.4.* \
@@ -42,6 +42,7 @@ RUN mamba install -y -n base -c conda-forge \
       pystac-client \
       odc-stac \
       jupyter-fs \
+      tornado=6.5.2 \
   && mamba clean -afy
 
 # Environment knobs to keep pip from leaving caches/pyc
@@ -49,14 +50,14 @@ ENV PIP_NO_CACHE_DIR=1
 ENV PYTHONDONTWRITEBYTECODE=1
 
 # Switch to notebook user for pip-only packages
-USER $NB_UID
+# USER $NB_UID
 
 RUN pip install --no-cache-dir --no-compile \
       rich \
       eodc-connect
 
 # Server config and permissions
-USER root
+# USER root
 COPY jupyterlab/jupyter_server_config.json /etc/jupyter/jupyter_server_config.json
 RUN fix-permissions "${CONDA_DIR}" \
  && fix-permissions "/home/${NB_USER}"
