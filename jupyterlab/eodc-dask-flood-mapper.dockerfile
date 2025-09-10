@@ -4,11 +4,6 @@ ARG TAG=python-3.12.10
 ARG BASE_IMAGE=$REGISTRY/$OWNER/minimal-notebook:$TAG
 FROM $BASE_IMAGE
 
-ARG GIT_REPO="https://github.com/interTwin-eu/dask-flood-mapper.git"
-ARG GIT_REF="workshop-modified"
-ARG TARGET_SUBDIR="workshop"        
-ARG TARGET_NAME="dask-flood-mapper"
-
 LABEL maintainer="EODC GmbH <support@eodc.eu>"
 
 # Safer shell
@@ -22,6 +17,10 @@ RUN apt-get update --yes \
       ca-certificates \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
+
+# Environment knobs to keep pip from leaving caches/pyc
+ENV PIP_NO_CACHE_DIR=1
+ENV PYTHONDONTWRITEBYTECODE=1
 
 # Conda/ Mamba install: pin a compact, compatible HoloViz stack for Py 3.12 + Bokeh 3.4
 RUN mamba install -y -n base -c conda-forge \
@@ -44,13 +43,8 @@ RUN mamba install -y -n base -c conda-forge \
       jupyter-fs \
       tornado=6.5.2 \
       nbgitpuller \
-  && mamba clean -afy
-
-# Environment knobs to keep pip from leaving caches/pyc
-ENV PIP_NO_CACHE_DIR=1
-ENV PYTHONDONTWRITEBYTECODE=1
-
-RUN pip install --no-cache-dir --no-compile \
+  && mamba clean -afy \
+  && pip install --no-cache-dir --no-compile \
       rich \
       eodc-connect
 
